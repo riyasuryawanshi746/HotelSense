@@ -1,0 +1,22 @@
+segment,metric,adf_level_p,adf_diff1_p,adf_seasdiff12_p,kpss_level_p,verdict
+1 & 2 Star Hotels+,occupancy,0.0123,0.107,0.0595,0.01,stationary (level)
+1 & 2 Star Hotels+,adr,0.32,0.0,0.1423,0.01,non-stationary; use d=1
+1 & 2 Star Hotels+,revpar,0.0038,0.0151,0.056,0.0436,stationary (level)
+3 Star Hotels+,occupancy,0.2528,0.0172,0.0189,0.01,non-stationary; d=1 and D=1 both work
+3 Star Hotels+,adr,0.0005,0.0,0.0443,0.04,stationary (level)
+3 Star Hotels+,revpar,0.0001,0.0004,0.0547,0.1,stationary (level)
+4 Star Hotels+,occupancy,0.0093,0.0228,0.0,0.1,stationary (level)
+4 Star Hotels+,adr,0.0142,0.0,0.0302,0.0121,stationary (level)
+4 Star Hotels+,revpar,0.0012,0.0001,0.0573,0.01,stationary (level)
+5 Star Hotels+,occupancy,0.0107,0.0008,0.005,0.1,stationary (level)
+5 Star Hotels+,adr,0.0,0.0,0.01,0.1,stationary (level)
+5 Star Hotels+,revpar,0.0,0.0,0.0109,0.0747,stationary (level)
+Deluxe Apartments+,occupancy,0.1873,0.0183,0.3169,0.01,non-stationary; use d=1
+Deluxe Apartments+,adr,0.0014,0.0,0.0136,0.0966,stationary (level)
+Deluxe Apartments+,revpar,0.0,0.0,0.0097,0.1,stationary (level)
+Qatar+,occupancy,0.0117,0.0097,0.022,0.0848,stationary (level)
+Qatar+,adr,0.0,0.0,0.012,0.1,stationary (level)
+Qatar+,revpar,0.0,0.0,0.0131,0.0902,stationary (level)
+Standard Apartments+,occupancy,0.0166,0.0,0.1951,0.1,stationary (level)
+Standard Apartments+,adr,0.0001,0.0,0.0073,0.1,stationary (level)
+Standard Apartments+,revpar,0.0,0.0,0.0201,0.1,stationary (level)

@@ -1,0 +1,8 @@
+segment,trend_strength,seasonal_strength
+1 & 2 Star Hotels+,0.666,0.42
+3 Star Hotels+,0.769,0.553
+4 Star Hotels+,0.607,0.607
+5 Star Hotels+,0.323,0.526
+Deluxe Apartments+,0.881,0.43
+Qatar+,0.514,0.505
+Standard Apartments+,0.558,0.164

@@ -16,3 +16,10 @@ python scripts/01_data_audit.py
 Outputs: `reports/data_audit.md`, `data/clean_accommodation.csv`.
 
 Data: Qatar Tourism via State of Qatar Open Data, licence CC BY.
+
+## Phase 2: EDA, decomposition, stationarity
+```bash
+python scripts/02_eda.py
+```
+Outputs: `reports/figures/*.png`, `reports/tables/*.csv`, `reports/eda_summary.md`.
+Reusable functions live in `backend/analysis.py` (STL, ADF/KPSS, period summaries).

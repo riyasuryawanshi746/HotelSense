@@ -1,0 +1,8 @@
+segment,mean,std,min,max,cv_%
+1 & 2 Star Hotels+,76.2,14.5,35.7,100.0,19.0
+3 Star Hotels+,71.6,12.2,37.0,94.8,17.0
+4 Star Hotels+,64.2,10.4,38.3,87.0,16.2
+5 Star Hotels+,60.0,10.3,37.8,84.0,17.2
+Deluxe Apartments+,69.2,12.5,42.4,94.4,18.1
+Qatar+,64.0,9.5,43.2,85.4,14.8
+Standard Apartments+,64.9,11.9,17.0,85.8,18.3
