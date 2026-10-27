@@ -23,3 +23,11 @@ python scripts/02_eda.py
 ```
 Outputs: `reports/figures/*.png`, `reports/tables/*.csv`, `reports/eda_summary.md`.
 Reusable functions live in `backend/analysis.py` (STL, ADF/KPSS, period summaries).
+
+## Phase 3: model comparison
+```bash
+python scripts/03_model_comparison.py --fast      # quick check
+python scripts/03_model_comparison.py             # full run (several minutes)
+```
+Outputs: `reports/model_comparison.md`, `reports/tables/*.csv`, `backend/models/sarima_config.json`.
+See `docs/methodology.md` for the evaluation design.

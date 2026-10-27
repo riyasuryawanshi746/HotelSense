@@ -46,7 +46,8 @@ def stationarity_report(series: pd.Series, alpha: float = 0.05) -> dict:
     d12 = adf(series.diff(12))
     k = kpss_test(series)
     if lvl["p_value"] < alpha:
-        verdict = "stationary (level)"
+        verdict = ("stationary (level)" if k["kpss_p"] >= alpha else
+                   "conflict: ADF stationary, KPSS not (likely level shift / break)")
     elif d1["p_value"] < alpha and d12["p_value"] < alpha:
         verdict = "non-stationary; d=1 and D=1 both work"
     elif d1["p_value"] < alpha:

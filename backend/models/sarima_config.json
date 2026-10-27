@@ -1,0 +1,296 @@
+{
+  "1 & 2 Star Hotels+|occupancy": {
+    "order": [
+      1,
+      1,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 9.492
+  },
+  "1 & 2 Star Hotels+|adr": {
+    "order": [
+      1,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 32.248
+  },
+  "1 & 2 Star Hotels+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 17.261
+  },
+  "3 Star Hotels+|occupancy": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 7.525
+  },
+  "3 Star Hotels+|adr": {
+    "order": [
+      1,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 40.029
+  },
+  "3 Star Hotels+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 44.868
+  },
+  "4 Star Hotels+|occupancy": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 11.208
+  },
+  "4 Star Hotels+|adr": {
+    "order": [
+      1,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 24.533
+  },
+  "4 Star Hotels+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 33.056
+  },
+  "5 Star Hotels+|occupancy": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 12.364
+  },
+  "5 Star Hotels+|adr": {
+    "order": [
+      1,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 47.435
+  },
+  "5 Star Hotels+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 77.653
+  },
+  "Deluxe Apartments+|occupancy": {
+    "order": [
+      1,
+      1,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 7.805
+  },
+  "Deluxe Apartments+|adr": {
+    "order": [
+      1,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 35.652
+  },
+  "Deluxe Apartments+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 47.717
+  },
+  "Qatar+|occupancy": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 10.167
+  },
+  "Qatar+|adr": {
+    "order": [
+      1,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 32.81
+  },
+  "Qatar+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 52.002
+  },
+  "Standard Apartments+|occupancy": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      0,
+      12
+    ],
+    "val_rmse": 16.577
+  },
+  "Standard Apartments+|adr": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 11.374
+  },
+  "Standard Apartments+|revpar": {
+    "order": [
+      1,
+      0,
+      0
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 49.06
+  }
+}
