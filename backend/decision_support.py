@@ -31,14 +31,16 @@ def _span(idx) -> str:
 
 
 def reliability(row: dict) -> dict:
+    """Backtest scores in `row` are for ONE horizon h (steps 1..h pooled); the text says which."""
     skill = float(row["skill_vs_snaive_pct"])
+    scope = f"{int(row['horizon'])}-month horizon"
     if bool(row["beats_baseline"]):
         return {"level": "model-supported", "skill_pct": round(skill, 1), "mape": round(float(row["MAPE"]), 1),
                 "text": (f"{row['best_model']} had {skill:.0f}% lower RMSE than simply repeating last year's "
-                         f"values in the backtest (MAPE {float(row['MAPE']):.1f}%).")}
+                         f"values in the backtest ({scope}, MAPE {float(row['MAPE']):.1f}%).")}
     return {"level": "baseline-level", "skill_pct": round(skill, 1), "mape": round(float(row["MAPE"]), 1),
             "text": ("No model beat simply repeating last year's values by at least 5% in the backtest "
-                     f"(best: {row['best_model']}, MAPE {float(row['MAPE']):.1f}%). Treat this as a rough "
+                     f"({scope}; best: {row['best_model']}, MAPE {float(row['MAPE']):.1f}%). Treat this as a rough "
                      "seasonal guide with wide uncertainty.")}
 
 

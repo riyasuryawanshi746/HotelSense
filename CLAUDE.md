@@ -83,9 +83,21 @@ Vite proxies `/api` to `http://127.0.0.1:8000`, so the browser uses a single ori
 | `/api/decomposition` | segment, metric | Trend explorer (STL, strength, ADF/KPSS) |
 | `/api/forecast` | segment, metric, horizon (3/6/12), model (`best` or a name) | Forecast |
 | `/api/evaluation` | segment, metric, horizon | Model comparison |
-| `/api/model-summary` | – | Model comparison (all 21 series) |
+| `/api/model-summary` | – | Model comparison (all 21 series); `scope` states each field's scope (see below) |
 | `/api/decision` | segment, metric, horizon | Forecast (DecisionPanel) |
 Errors: 400 bad metric/horizon, 404 unknown segment, 503 missing report tables; body `{"detail": "..."}`.
+
+### Metric scopes (keep API fields and UI labels in agreement)
+A "horizon h" result always pools forecast steps 1..h (6-month horizon = months 1-6 ahead). UI labels come from
+`frontend/src/format.js`: `horizonLabel(h)` -> "6-month horizon", `ALL_HORIZONS` -> "All horizons".
+`/api/model-summary` fields:
+- By horizon (keyed "3"/"6"/"12"): `wins_by_horizon`, `median_skill_vs_baseline_pct`, `raw_interval_coverage_pct` (mean),
+  `median_mape_by_metric_and_horizon` ({h: {metric: {model: MAPE}}}), `pct_series_where_model_beats_baseline_by_horizon` ({h: {metric: pct}}).
+- All horizons (median/share over 7 segments x 3 horizons): `median_mape_by_metric`, `pct_series_where_model_beats_baseline`.
+  Never show these under a single-horizon label; if a horizon-specific value is missing, show "not available" instead.
+- The two `..._by_horizon` fields and `scope` were added (additive, no existing field changed); `05_smoke_test.py` checks them.
+Elsewhere: `/api/evaluation` `table` rows and `reliability.mape` are per horizon; the `/api/evaluation` `backtest` chart is
+step h only (not 1..h); `/api/overview` `best_model_6m` is the 6-month horizon.
 
 ## Key design decisions (do not silently change)
 - **Models:** Seasonal Naive (baseline); Holt-Winters (additive ETS via statsmodels `ETSModel`, optional damped
@@ -107,12 +119,15 @@ Errors: 400 bad metric/horizon, 404 unknown segment, 503 missing report tables; 
   segment, never as decisions for a specific hotel.
 
 ## Current results (full SARIMA grid, from reports/model_comparison.md and /api/model-summary)
-- Wins (lowest RMSE) at 3 / 6 / 12 months: Combination 10 / 9 / 8, Seasonal Naive 8 / 8 / 8, SARIMA 2 / 3 / 4, Holt-Winters 1 / 1 / 1.
-- Median skill vs Seasonal Naive: Combination +7.2 / +4.3 / +5.4%; Holt-Winters -0.2 / -5.0 / -2.2%; SARIMA -1.7 / -2.5 / -0.5%.
-- The winner beats the baseline by >= 5% in only 52 / 48 / 52% of series.
-- By metric (share of series x horizons where the winner is a real improvement): occupancy 86%, RevPAR 52%, ADR 14%.
-  ADR is essentially "same as last year".
-- 3-month median MAPE, occupancy: Holt-Winters 12.0%, Combination 12.2%, Seasonal Naive 13.3%, SARIMA 14.9%.
+Figures below are "3-month / 6-month / 12-month horizon" unless marked "All horizons".
+- Wins (lowest RMSE), 3 / 6 / 12-month horizon: Combination 10 / 9 / 8, Seasonal Naive 8 / 8 / 8, SARIMA 2 / 3 / 4, Holt-Winters 1 / 1 / 1.
+- Median skill vs Seasonal Naive, 3 / 6 / 12-month horizon: Combination +7.2 / +4.3 / +5.4%; Holt-Winters -0.2 / -5.0 / -2.2%; SARIMA -1.7 / -2.5 / -0.5%.
+- The winner beats the baseline by >= 5% in only 52 / 48 / 52% of the 21 series (3 / 6 / 12-month horizon).
+- By metric, winner beats the baseline by >= 5%: occupancy 86 / 86 / 86%, RevPAR 57 / 43 / 57%, ADR 14 / 14 / 14%
+  of segments (3 / 6 / 12-month horizon); All horizons: occupancy 86%, RevPAR 52%, ADR 14%. ADR is essentially "same as last year".
+- Median MAPE, occupancy, 3-month horizon: Holt-Winters 12.0%, Combination 12.2%, Seasonal Naive 13.3%, SARIMA 14.9%.
+  The All-horizons occupancy medians (Combination 12.4%, Holt-Winters 12.5%, Seasonal Naive 14.6%, SARIMA 15.2%) are
+  not any single horizon's values.
 - These numbers supersede an earlier fast-grid run (where Seasonal Naive won most series). Re-check them after any re-run;
   the UI reads them live from the API, but CLAUDE.md and the report text do not.
 

@@ -43,7 +43,22 @@ for seg in meta["segments"]:
             d = S.decision(seg, m, h)
             check(len(d["signals"]) >= 4 and d["headline"], f"{tag}: decision incomplete")
             check(not re.search(r"\bnan\b|\binf\b", str(d).lower()), f"{tag}: NaN/inf in decision")
-S.model_summary(); [S.overview(m) for m in ("occupancy", "adr", "revpar")]
+[S.overview(m) for m in ("occupancy", "adr", "revpar")]
+
+# model-summary: horizon-specific tables exist for every horizon and agree with model_comparison.csv
+ms = S.model_summary()
+for key in ("median_mape_by_metric", "pct_series_where_model_beats_baseline",
+            "median_mape_by_metric_and_horizon", "pct_series_where_model_beats_baseline_by_horizon"):
+    check(key in ms and key in ms["scope"], f"model-summary: {key} or its scope missing")
+res = S.store()["res"]
+for h in meta["horizons"]:
+    check(str(h) in ms["median_mape_by_metric_and_horizon"], f"model-summary: MAPE for horizon {h} missing")
+    check(str(h) in ms["pct_series_where_model_beats_baseline_by_horizon"], f"model-summary: beats for horizon {h} missing")
+    for (m, model), v in res[res.horizon == h].groupby(["metric", "model"])["MAPE"].median().items():
+        got = ms["median_mape_by_metric_and_horizon"][str(h)][m][model]
+        check(abs(got - round(v, 1)) < 1e-9, f"model-summary: MAPE {m}/{model}/{h} = {got}, expected {v:.1f}")
+f6 = S.forecast("Qatar+", "occupancy", 6)
+check("6-month horizon" in f6["reliability"]["text"], "reliability text does not name its horizon")
 
 for args, label in [(("Nowhere", "occupancy", 6), "bad segment"), (("Qatar+", "profit", 6), "bad metric"),
                     (("Qatar+", "occupancy", 5), "bad horizon")]:

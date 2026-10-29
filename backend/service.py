@@ -183,6 +183,11 @@ def evaluation(segment: str, metric: str, horizon: int) -> dict:
 
 
 def model_summary() -> dict:
+    """
+    Summaries across all 21 series. Each row of model_comparison.csv is ONE horizon h, whose metrics
+    pool forecast steps 1..h. "By horizon" fields keep h separate; "all horizons" fields take the
+    median/mean over the 3-, 6- and 12-month rows together. The `scope` dict states this per field.
+    """
     s = store()
     best, res = s["best"], s["res"]
     wins = best.groupby(["horizon", "best_model"]).size().unstack(fill_value=0).astype(float)
@@ -191,9 +196,25 @@ def model_summary() -> dict:
     cov = res.groupby(["horizon", "model"])["coverage80"].mean().unstack()
     mape = res.groupby(["metric", "model"])["MAPE"].median().unstack()
     beats = best.groupby("metric")["beats_baseline"].mean().mul(100).to_frame("pct_series_beating_baseline")
+    # horizon-specific versions of the two "all horizons" tables: {horizon: {metric: {...}}}
+    mape_h = {str(h): _tbl(g.groupby(["metric", "model"])["MAPE"].median().unstack())
+              for h, g in res.groupby("horizon")}
+    beats_h = best.groupby(["horizon", "metric"])["beats_baseline"].mean().mul(100).unstack()
     return {"wins_by_horizon": _tbl(wins), "median_skill_vs_baseline_pct": _tbl(skill),
             "raw_interval_coverage_pct": _tbl(cov), "median_mape_by_metric": _tbl(mape),
-            "pct_series_where_model_beats_baseline": _tbl(beats)}
+            "pct_series_where_model_beats_baseline": _tbl(beats),
+            "median_mape_by_metric_and_horizon": mape_h,
+            "pct_series_where_model_beats_baseline_by_horizon": _tbl(beats_h),
+            "scope": {
+                "wins_by_horizon": "by horizon: count of the 21 series where each model has the lowest RMSE",
+                "median_skill_vs_baseline_pct": "by horizon: median over the 21 series",
+                "raw_interval_coverage_pct": "by horizon: mean over the 21 series (raw model intervals)",
+                "median_mape_by_metric": "all horizons: median over 7 segments x 3 horizons (3, 6, 12)",
+                "pct_series_where_model_beats_baseline": "all horizons: share of 7 segments x 3 horizons",
+                "median_mape_by_metric_and_horizon": "by horizon: median over the 7 segments",
+                "pct_series_where_model_beats_baseline_by_horizon": "by horizon: share of the 7 segments",
+                "horizon_definition": "horizon h pools forecast steps 1..h (e.g. 6 = months 1-6 ahead)",
+            }}
 
 
 def overview(metric: str = "occupancy") -> dict:

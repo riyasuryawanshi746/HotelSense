@@ -3,7 +3,7 @@
 import { useNavigate } from "react-router-dom";
 import { useApi } from "../api.js";
 import { useSelection } from "../selection.jsx";
-import { fmtSigned, fmtValue } from "../format.js";
+import { fmtSigned, fmtValue, horizonDetail, horizonLabel } from "../format.js";
 import Chart from "../components/Chart.jsx";
 import Controls from "../components/Controls.jsx";
 import { Async, Badge, Card } from "../components/ui.jsx";
@@ -42,7 +42,7 @@ export default function Overview() {
 
               <Card
                 title="Segments"
-                subtitle={'"Best model (6 months)" is the lowest-error model in the backtest. "No better than last year" means it did not beat simply repeating last year\'s values by at least 5%.'}
+                subtitle={`"Best model" is the lowest-RMSE model in the backtest at the ${horizonDetail(6)}. "No better than last year" means it did not beat simply repeating last year's values by at least 5%.`}
               >
                 <div className="table-wrap">
                   <table>
@@ -54,7 +54,7 @@ export default function Overview() {
                         <th className="num">Last 12 months</th>
                         <th className="num">Previous 12 months</th>
                         <th className="num">Change</th>
-                        <th>Best model (6 months)</th>
+                        <th>Best model ({horizonLabel(6)})</th>
                       </tr>
                     </thead>
                     <tbody>

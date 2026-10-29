@@ -20,6 +20,12 @@ SARIMA (grid, validation RMSE), Combination (mean of Holt-Winters and SARIMA).
 RMSE skill vs Seasonal Naive = 1 - RMSE / RMSE_snaive. Horizon-h scores pool steps 1..h from every origin
 that has h months of future data; all models are scored on identical cells.
 
+**Reporting scopes.** Every score is attached to one horizon (3, 6 or 12 months, pooling steps 1..h), so the
+12-month score also contains the 1-3 month errors. Summaries across series are either *by horizon* (median or
+share over the 7 segments or 21 series at that horizon) or *all horizons* (median or share over the 3-, 6- and
+12-month results together). An all-horizons figure is not the score of any single horizon, and the app and
+reports label the two separately ("6-month horizon" vs "All horizons").
+
 **Selection rule.** Lowest RMSE per segment, metric and horizon. The winner is called a real improvement
 only if it beats the baseline by at least 5%; otherwise the app should say the forecast is no better than
 "same as last year".

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useApi } from "../api.js";
 import { useSelection } from "../selection.jsx";
-import { MODEL_COLORS, fmtNum, fmtValue } from "../format.js";
+import { MODEL_COLORS, fmtNum, fmtValue, horizonDetail } from "../format.js";
 import Chart from "../components/Chart.jsx";
 import Controls from "../components/Controls.jsx";
 import DecisionPanel from "../components/DecisionPanel.jsx";
@@ -105,8 +105,8 @@ export default function Forecast() {
             <ReliabilityNote r={f.reliability} />
             <Chart data={forecastTraces(f, showOthers)} layout={{ yaxis: { title: f.label } }} height={400} />
             <p className="muted small">
-              Last published month: {f.last_observed}. Interval: {f.interval_method}. Backtest MAPE of the best model at
-              this horizon: {fmtNum(f.reliability.mape)}%.
+              Last published month: {f.last_observed}. Interval: {f.interval_method}. Backtest MAPE of the best model,{" "}
+              {horizonDetail(f.horizon)}: {fmtNum(f.reliability.mape)}%.
               {f.chosen_model !== f.best_model && ` You are viewing ${f.chosen_model}; the backtest winner is ${f.best_model}.`}
             </p>
             <ForecastTable f={f} metric={metric} />

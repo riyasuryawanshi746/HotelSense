@@ -37,6 +37,16 @@ export const MODEL_COLORS = {
 // Month numbers 1..12 to short names for the seasonal profile chart.
 export const MONTH_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+// Scope labels for backtest metrics, used everywhere so they stay consistent.
+// A horizon-h result pools forecast steps 1..h (e.g. the 6-month horizon = months 1-6 ahead).
+export const ALL_HORIZONS = "All horizons";
+export function horizonLabel(h) {
+  return `${h}-month horizon`;
+}
+export function horizonDetail(h) {
+  return `${h}-month horizon (months 1–${h} ahead)`;
+}
+
 // Axis unit for chart titles.
 export function unitOf(metric) {
   return metric === "occupancy" ? "%" : "QAR";
