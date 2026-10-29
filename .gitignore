@@ -1,7 +1,19 @@
+# Python
 __pycache__/
 *.py[cod]
 .venv/
 venv/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+dist/
+*.log
+
+# Secrets and editor/OS files
 .env
 .vscode/
 .DS_Store
+Thumbs.db
+
+# Kept on purpose (do NOT ignore): data/accommodation_data.csv, reports/, backend/models/*.json

@@ -48,6 +48,12 @@ segs = args.segments or list_segments(df)
 metrics = args.metrics or ["occupancy", "adr", "revpar"]
 first_origin = pd.Timestamp(args.first_origin)
 cfg = F.load_config()
+grid_name = "fast" if args.fast else "full"
+if cfg.get("_meta", {}).get("grid") != grid_name:
+    if cfg:
+        print(f"Cached SARIMA config was not built with the '{grid_name}' grid -> re-selecting.")
+    cfg = {}
+cfg["_meta"] = {"grid": grid_name}
 
 all_bt, all_res = [], []
 t0 = time.time()

@@ -1,9 +1,12 @@
 {
+  "_meta": {
+    "grid": "full"
+  },
   "1 & 2 Star Hotels+|occupancy": {
     "order": [
+      2,
       1,
-      1,
-      1
+      0
     ],
     "seasonal_order": [
       1,
@@ -11,21 +14,21 @@
       0,
       12
     ],
-    "val_rmse": 9.492
+    "val_rmse": 8.579
   },
   "1 & 2 Star Hotels+|adr": {
     "order": [
-      1,
+      0,
       0,
       1
     ],
     "seasonal_order": [
+      1,
+      1,
       0,
-      1,
-      1,
       12
     ],
-    "val_rmse": 32.248
+    "val_rmse": 29.329
   },
   "1 & 2 Star Hotels+|revpar": {
     "order": [
@@ -57,7 +60,7 @@
   },
   "3 Star Hotels+|adr": {
     "order": [
-      1,
+      0,
       0,
       1
     ],
@@ -67,77 +70,77 @@
       0,
       12
     ],
-    "val_rmse": 40.029
+    "val_rmse": 27.726
   },
   "3 Star Hotels+|revpar": {
     "order": [
-      1,
       0,
-      0
-    ],
-    "seasonal_order": [
-      0,
-      1,
-      1,
-      12
-    ],
-    "val_rmse": 44.868
-  },
-  "4 Star Hotels+|occupancy": {
-    "order": [
-      1,
-      0,
-      0
-    ],
-    "seasonal_order": [
-      1,
-      0,
-      0,
-      12
-    ],
-    "val_rmse": 11.208
-  },
-  "4 Star Hotels+|adr": {
-    "order": [
-      1,
       0,
       1
     ],
     "seasonal_order": [
       1,
       0,
-      0,
+      1,
       12
     ],
-    "val_rmse": 24.533
+    "val_rmse": 34.913
+  },
+  "4 Star Hotels+|occupancy": {
+    "order": [
+      0,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      1,
+      0,
+      1,
+      12
+    ],
+    "val_rmse": 10.866
+  },
+  "4 Star Hotels+|adr": {
+    "order": [
+      0,
+      0,
+      1
+    ],
+    "seasonal_order": [
+      0,
+      1,
+      1,
+      12
+    ],
+    "val_rmse": 18.239
   },
   "4 Star Hotels+|revpar": {
     "order": [
-      1,
       0,
-      0
+      0,
+      1
     ],
     "seasonal_order": [
       1,
       0,
-      0,
+      1,
       12
     ],
-    "val_rmse": 33.056
+    "val_rmse": 26.066
   },
   "5 Star Hotels+|occupancy": {
     "order": [
-      1,
+      0,
       0,
       0
     ],
     "seasonal_order": [
-      0,
       1,
+      0,
       1,
       12
     ],
-    "val_rmse": 12.364
+    "val_rmse": 9.635
   },
   "5 Star Hotels+|adr": {
     "order": [
@@ -148,16 +151,16 @@
     "seasonal_order": [
       1,
       0,
-      0,
+      1,
       12
     ],
-    "val_rmse": 47.435
+    "val_rmse": 45.194
   },
   "5 Star Hotels+|revpar": {
     "order": [
-      1,
       0,
-      0
+      0,
+      1
     ],
     "seasonal_order": [
       1,
@@ -165,25 +168,25 @@
       0,
       12
     ],
-    "val_rmse": 77.653
+    "val_rmse": 67.682
   },
   "Deluxe Apartments+|occupancy": {
     "order": [
-      1,
-      1,
-      0
+      0,
+      0,
+      1
     ],
     "seasonal_order": [
-      0,
       1,
+      0,
       1,
       12
     ],
-    "val_rmse": 7.805
+    "val_rmse": 5.085
   },
   "Deluxe Apartments+|adr": {
     "order": [
-      1,
+      2,
       0,
       1
     ],
@@ -193,35 +196,35 @@
       1,
       12
     ],
-    "val_rmse": 35.652
+    "val_rmse": 31.077
   },
   "Deluxe Apartments+|revpar": {
     "order": [
-      1,
       0,
-      0
+      0,
+      1
     ],
     "seasonal_order": [
+      1,
+      1,
       0,
-      1,
-      1,
       12
     ],
-    "val_rmse": 47.717
+    "val_rmse": 22.155
   },
   "Qatar+|occupancy": {
     "order": [
-      1,
+      0,
       0,
       0
     ],
     "seasonal_order": [
-      0,
       1,
+      0,
       1,
       12
     ],
-    "val_rmse": 10.167
+    "val_rmse": 6.076
   },
   "Qatar+|adr": {
     "order": [
@@ -239,35 +242,35 @@
   },
   "Qatar+|revpar": {
     "order": [
-      1,
       0,
-      0
+      0,
+      1
     ],
     "seasonal_order": [
+      1,
       0,
-      1,
-      1,
+      0,
       12
     ],
-    "val_rmse": 52.002
+    "val_rmse": 42.173
   },
   "Standard Apartments+|occupancy": {
     "order": [
-      1,
+      0,
       0,
       0
     ],
     "seasonal_order": [
+      0,
       1,
-      0,
-      0,
+      1,
       12
     ],
-    "val_rmse": 16.577
+    "val_rmse": 12.427
   },
   "Standard Apartments+|adr": {
     "order": [
-      1,
+      0,
       0,
       0
     ],
@@ -277,20 +280,20 @@
       1,
       12
     ],
-    "val_rmse": 11.374
+    "val_rmse": 10.507
   },
   "Standard Apartments+|revpar": {
     "order": [
-      1,
+      0,
       0,
       0
     ],
     "seasonal_order": [
-      0,
       1,
+      0,
       1,
       12
     ],
-    "val_rmse": 49.06
+    "val_rmse": 33.357
   }
 }
