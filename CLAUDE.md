@@ -56,6 +56,7 @@ backend/
   data_loader.py       the single place data is loaded and cleaned
   preprocessing.py     actual vs World-Cup-adjusted series
   analysis.py          STL decomposition, ADF/KPSS, trend/seasonal strength
+  eda.py               dataset summary, quality checks (same as 01_data_audit), EDA tables, computed key findings
   forecasting.py       4 models + forecast_future()
   evaluation.py        rolling-origin backtest, metrics, skill, best-model selection
   calibration.py       empirical 80% intervals from backtest errors
@@ -70,7 +71,7 @@ frontend/        React 18 + Vite, plain JSX, Plotly (plotly.js-basic-dist-min), 
   src/api.js           fetch wrapper + useApi() hook; the only place that calls the backend
   src/selection.jsx    shared segment/metric/horizon state + /api/meta
   src/format.js        number formatting, model colours
-  src/components/      Chart (Plotly wrapper), Controls, DecisionPanel, ui (Card, Badge, Async, ErrorBox...)
+  src/components/      Chart (Plotly wrapper), Controls, DecisionPanel, Eda (Overview sections), ui (Card, Badge, Async...)
   src/pages/           Overview, TrendExplorer, Forecast, ModelComparison
 ```
 Vite proxies `/api` to `http://127.0.0.1:8000`, so the browser uses a single origin in development.
@@ -80,7 +81,8 @@ Vite proxies `/api` to `http://127.0.0.1:8000`, so the browser uses a single ori
 |---|---|---|
 | `/api/health` | – | – |
 | `/api/meta` | – | segments, metrics, horizons, date range |
-| `/api/overview` | metric | Overview |
+| `/api/overview` | metric | Overview (latest 12 months by segment) |
+| `/api/eda` | metric | Overview (dataset at a glance, key findings, EDA charts; `backend/eda.py`) |
 | `/api/history` | segment, metric | Trend explorer (history, stats, seasonal profile, events) |
 | `/api/decomposition` | segment, metric | Trend explorer (STL, strength, ADF/KPSS) |
 | `/api/forecast` | segment, metric, horizon (3/6/12), model (`best` or a name) | Forecast |

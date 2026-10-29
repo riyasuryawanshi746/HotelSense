@@ -71,7 +71,7 @@ export default function DecisionPanel({ segment, metric, horizon }) {
   return (
     <Card
       title="Decision support"
-      subtitle="Planning signals calculated from the forecasts below. They are prompts for discussion, not guaranteed decisions."
+      subtitle="Planning signals calculated from the forecasts above. They are prompts for discussion, not guaranteed decisions."
     >
       <Async state={state}>
         {(d) => {

@@ -45,6 +45,15 @@ start it (Terminal 1) and reload the page. The page does not retry on its own.
 
 Production build check: `cd frontend` then `npm run build` (output in `frontend/dist/`, not committed).
 
+### The four pages
+- **Overview**: *Dataset at a glance* (raw file to cleaned data, data-quality checks), *Key findings*, the
+  latest 12 months for every segment, and *EDA highlights* for the selected metric (yearly trend, seasonal
+  pattern, distribution, before/during/after COVID, occupancy vs ADR, unusual months). Served by `/api/eda`
+  and `/api/overview`; the unusual-months table reads `reports/tables/outliers_stl_residual.csv` from `02_eda.py`.
+- **Trend explorer**: one segment's history, seasonal profile, STL decomposition and ADF/KPSS tests.
+- **Forecast**: 3/6/12-month forecast with the calibrated 80% range and the decision-support panel.
+- **Model comparison**: backtest errors per horizon for one series, and the summary across all 21 series.
+
 ## Tests and validation
 Run from the project root with the backend virtualenv (the backend server does not need to be running).
 ```powershell
@@ -69,7 +78,8 @@ committed full-grid results; re-run without `--fast` (then 04 and 07) before rep
 ## Project layout
 ```
 data/        raw CSV (semicolon-delimited) + generated clean CSV
-backend/     data loading, analysis, models, backtest, calibration, decision rules, service.py, main.py (FastAPI)
+backend/     data loading, analysis, EDA summaries (eda.py), models, backtest, calibration, decision rules,
+             service.py (all app logic), main.py (FastAPI)
   models/    sarima_config.json, calibration.json (generated)
 scripts/     01-04 pipeline, 05 smoke test, 06 decision-rule tests, 07 change-rule validation
 reports/     data_audit.md, eda_summary.md, model_comparison.md, change_rule_validation.md, figures/, tables/

@@ -68,3 +68,8 @@ def model_summary():
 @app.get("/api/decision")
 def decision(segment: str, metric: str = "occupancy", horizon: int = Query(6)):
     return run(S.decision, segment, metric, horizon)
+
+
+@app.get("/api/eda")
+def eda(metric: str = "occupancy"):
+    return run(S.eda, metric)

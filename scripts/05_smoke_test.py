@@ -50,6 +50,31 @@ for seg in meta["segments"]:
             check(d["signals"][0]["status"] == d["changes"][m]["status"], f"{tag}: outlook status != change status")
 [S.overview(m) for m in ("occupancy", "adr", "revpar")]
 
+# /api/eda: dataset summary agrees with the data, charts have one entry per segment, no NaN anywhere
+raw, df_all = S.load_raw(), S.store()["df"]
+for m in [x["id"] for x in meta["metrics"]]:
+    e = S.eda(m)
+    ds = e["dataset"]
+    check(ds["raw"]["rows"] == len(raw) and ds["clean"]["rows"] == len(df_all), f"eda {m}: row counts")
+    check(ds["clean"]["first_date"] == meta["first_date"] and ds["clean"]["last_date"] == meta["last_date"], f"eda {m}: dates")
+    check(ds["clean"]["n_segments"] == len(meta["segments"]) and ds["clean"]["n_series"] == 21, f"eda {m}: segments/series")
+    check(ds["quality"][0]["result"] == int(raw.isna().sum().sum()), f"eda {m}: missing-value count")
+    check(len(ds["occupancy_over_100"]) == int((df_all.occupancy > 100).sum()), f"eda {m}: occupancy > 100 count")
+    check(sorted(e["annual_means"]["series"]) == sorted(meta["segments"]), f"eda {m}: annual means per segment")
+    check(sorted(e["seasonal_profile"]["series"]) == sorted(meta["segments"]), f"eda {m}: seasonal per segment")
+    check(e["seasonal_profile"]["series"]["Qatar+"] == S.history("Qatar+", m)["seasonal_profile"]["values"],
+          f"eda {m}: seasonal profile differs from Trend explorer")
+    check(all(len(v) == len(e["annual_means"]["years"]) for v in e["annual_means"]["series"].values()), f"eda {m}: years")
+    check(all(d["q1"] <= d["median"] <= d["q3"] and d["min"] <= d["q1"] and d["q3"] <= d["max"]
+              for d in e["distribution"].values()), f"eda {m}: quartiles out of order")
+    check(len(e["key_findings"]) >= 6, f"eda {m}: key findings missing")
+    check(not re.search(r"\bnan\b|\binf\b|None", str(e["key_findings"]) + str(ds["cleaning_steps"])), f"eda {m}: NaN in text")
+    check(e["outliers"] is not None and e["outliers"]["total"] > 0, f"eda {m}: outlier table not loaded")
+try:
+    S.eda("profit"); check(False, "eda bad metric: no error raised")
+except S.ServiceError as err:
+    check(err.status == 400, "eda bad metric: wrong status")
+
 # model-summary: horizon-specific tables exist for every horizon and agree with model_comparison.csv
 ms = S.model_summary()
 for key in ("median_mape_by_metric", "pct_series_where_model_beats_baseline",
@@ -79,6 +104,7 @@ try:
     for url, code in [("/api/health", 200), ("/api/meta", 200), ("/api/overview?metric=revpar", 200),
                       ("/api/forecast?segment=Qatar%2B&metric=occupancy&horizon=6", 200),
                       ("/api/decision?segment=Qatar%2B&metric=adr&horizon=12", 200),
+                      ("/api/eda?metric=adr", 200), ("/api/eda?metric=profit", 400),
                       ("/api/forecast?segment=Nope&metric=occupancy&horizon=6", 404),
                       ("/api/forecast?segment=Qatar%2B&metric=occupancy&horizon=7", 400)]:
         r = c.get(url); check(r.status_code == code, f"HTTP {url}: got {r.status_code}, expected {code}")

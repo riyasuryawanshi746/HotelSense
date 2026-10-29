@@ -28,4 +28,7 @@ results into transparent planning signals.
 - Data is aggregated by segment; no recommendation can target a single hotel.
 - Few years of history, and two major shocks (COVID, World Cup) are hard to forecast.
 - Forecasts are planning signals, not guaranteed outcomes.
-- 12-month horizon is allowed only if validation shows acceptable accuracy.
+- The 12-month horizon is offered in the app. Its backtest accuracy is reported per series (Model comparison
+  page, `reports/model_comparison.md`), but the 12-month clear-change rule in the decision support has not been
+  validated out of sample (too few eligible forecast origins; see `reports/change_rule_validation.md`), so
+  12-month decision signals carry that caveat.

@@ -14,8 +14,9 @@ import pandas as pd
 import analysis as A
 import calibration as C
 import decision_support as D
+import eda as E
 import forecasting as F
-from data_loader import AGGREGATE_SEGMENT, METRICS, get_series, list_segments, load_clean
+from data_loader import AGGREGATE_SEGMENT, METRICS, get_series, list_segments, load_clean, load_raw
 from preprocessing import prepare
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -251,3 +252,27 @@ def decision(segment: str, metric: str, horizon: int) -> dict:
     out = D.build_decision(segment, metric, horizon, hist, frames, rows, last, avg_q)
     out["models_used"] = {m: rows[m]["best_model"] for m in METRICS}
     return out
+
+
+def eda(metric: str = "occupancy") -> dict:
+    """
+    Overview page: dataset summary, EDA charts for one metric and key findings (see backend/eda.py).
+    The seasonal profiles reuse history() so they match the Trend explorer exactly.
+    """
+    _check(metric=metric)
+    df = store()["df"]
+    ds = E.dataset_summary(load_raw(), df, METRIC_LABELS)
+    seasonal = {seg: history(seg, metric)["seasonal_profile"]["values"] for seg in list_segments(df)}
+    occ_profile = history(AGGREGATE_SEGMENT, "occupancy")["seasonal_profile"]["values"]
+    outliers_path = TABLES / "outliers_stl_residual.csv"
+    return {"metric": metric, "label": METRIC_LABELS[metric],
+            "dataset": ds,
+            "annual_means": E.annual_means(df, metric),
+            "seasonal_profile": {"months": E.MONTHS, "series": seasonal,
+                                 "note": "Monthly mean excluding COVID months (2020-03 to 2021-12); "
+                                         "ADR/RevPAR use the World-Cup-adjusted series, as in the Trend explorer."},
+            "distribution": E.distribution(df, metric),
+            "period_means": E.period_means(df, metric),
+            "relationship": E.occupancy_adr_relationship(df),
+            "outliers": E.outlier_summary(outliers_path, metric),
+            "key_findings": E.key_findings(df, ds, occ_profile, outliers_path)}

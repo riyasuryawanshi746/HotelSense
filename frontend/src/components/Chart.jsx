@@ -9,7 +9,8 @@ const BASE_LAYOUT = {
   paper_bgcolor: "rgba(0,0,0,0)",
   plot_bgcolor: "rgba(0,0,0,0)",
   font: { family: "system-ui, sans-serif", size: 12, color: "#334155" },
-  legend: { orientation: "h", y: -0.18 },
+  // Legend below the plot, anchored at its top so extra rows grow downwards instead of over the lines.
+  legend: { orientation: "h", y: -0.15, yanchor: "top" },
   hovermode: "x unified",
   xaxis: { gridcolor: "#e2e8f0" },
   yaxis: { gridcolor: "#e2e8f0", zeroline: false },
