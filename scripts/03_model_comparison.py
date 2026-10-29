@@ -130,11 +130,16 @@ bm = best.pivot_table(index=["segment", "metric"], columns="horizon", values="be
 md = [f"# HotelSense - Model Comparison\n",
       f"Rolling-origin backtest: first training cut-off {first_origin:%Y-%m}, a new origin every {args.step} months, "
       f"forecast up to 12 months ahead, 80% prediction intervals. Scored against published values.\n",
-      "## Winning model count (lowest RMSE)\n", wins.to_markdown(),
-      "\n\n## Median RMSE skill vs Seasonal Naive (%, positive = better than baseline)\n", med_skill.to_markdown(),
-      "\n\n## % of series where the winner beats the baseline by at least 5%\n", beats.to_frame("pct").to_markdown(),
-      "\n\n## Median MAPE (%) by metric, horizon and model\n", mape.to_markdown(),
-      "\n\n## Mean empirical coverage of the nominal 80% interval (%)\n", cov.to_markdown(),
+      # state the scope so horizon-specific numbers are never confused with the all-horizons pooled ones
+      "Scope: every table below is by horizon. A '3-month horizon' result pools forecast months 1-3 ahead, "
+      "'6-month' months 1-6, '12-month' months 1-12; no table is pooled across horizons. The all-horizons "
+      "pooled median MAPE (median over the 3-, 6- and 12-month results) is a different number and is "
+      "reported separately by the API (/api/model-summary, field median_mape_by_metric).\n",
+      "## Winning model count (lowest RMSE), by horizon\n", wins.to_markdown(),
+      "\n\n## Median RMSE skill vs Seasonal Naive (%, positive = better than baseline), by horizon\n", med_skill.to_markdown(),
+      "\n\n## % of the 21 series where the winner beats the baseline by at least 5%, by horizon\n", beats.to_frame("pct").to_markdown(),
+      "\n\n## Median MAPE (%) by metric, horizon and model (horizon-specific; median over the 7 segments)\n", mape.to_markdown(),
+      "\n\n## Mean empirical coverage of the raw nominal 80% interval (%), by horizon\n", cov.to_markdown(),
       "\n\n## Best model per segment, metric and horizon\n", bm.to_markdown(),
       "\n\n## Chosen SARIMA specifications\n",
       pd.DataFrame([{"series": k, "order": v["order"], "seasonal": v["seasonal_order"], "val_rmse": v["val_rmse"]}

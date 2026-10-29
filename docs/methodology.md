@@ -30,5 +30,24 @@ reports label the two separately ("6-month horizon" vs "All horizons").
 only if it beats the baseline by at least 5%; otherwise the app should say the forecast is no better than
 "same as last year".
 
+**Clear-change rule (decision support R1).** Question: is the average over the forecast months materially
+different from the same calendar months last year, for the same segment and metric? Last year's values are
+published, so the uncertainty is that of the forecast *average*. We take it from the backtest: for each origin
+with h months of future data, average its h errors; the 80th percentile of the absolute averages is the
+uncertainty. Taking whole origins keeps the observed correlation between monthly errors (median 0.2-0.45 at the
+3- and 6-month horizons), so we do not divide by sqrt(h); per metric and horizon the measured width was a
+median 0.3-0.9x the single-month half-width, in every case above 1/sqrt(h). A change is "supported" only if it exceeds this uncertainty and a planning
+threshold (2 pts occupancy, 3% ADR/RevPAR). These thresholds are provisional business assumptions, not
+statistically validated or optimised values. The previous rule compared the
+average change with the single-month half-width, which overstates the uncertainty of an average.
+Out-of-sample check (leak-free, `reports/change_rule_validation.md`): coverage of the average error was 77.8%
+at the 3-month horizon and 90.1% at the 6-month horizon (nominal 80%). Directional accuracy of "supported" calls,
+for the model the app uses, was 11 of 16 calls (3-month) and 1 of 2 (6-month); across all four models 39 of 68
+and 8 of 16. These counts are small and the results only indicative: forecast windows overlap, the hotel series
+are correlated, and few origins are eligible. The 12-month rule, including its directional calls, is untested
+out of sample because there are too few eligible origins. A supported change is therefore a prompt to
+investigate, not an automatic pricing recommendation, and no clear-change signal does not prove that
+performance will stay the same.
+
 **Limitations.** Backtest origins overlap, so scores are not independent. The test window (2023-2025) is
 short. COVID months remain in the training data. Combination intervals are an approximation.

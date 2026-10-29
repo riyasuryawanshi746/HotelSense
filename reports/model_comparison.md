@@ -2,7 +2,9 @@
 
 Rolling-origin backtest: first training cut-off 2022-12, a new origin every 2 months, forecast up to 12 months ahead, 80% prediction intervals. Scored against published values.
 
-## Winning model count (lowest RMSE)
+Scope: every table below is by horizon. A '3-month horizon' result pools forecast months 1-3 ahead, '6-month' months 1-6, '12-month' months 1-12; no table is pooled across horizons. The all-horizons pooled median MAPE (median over the 3-, 6- and 12-month results) is a different number and is reported separately by the API (/api/model-summary, field median_mape_by_metric).
+
+## Winning model count (lowest RMSE), by horizon
 
 |   horizon |   Combination |   Holt-Winters |   SARIMA |   Seasonal Naive |
 |----------:|--------------:|---------------:|---------:|-----------------:|
@@ -11,7 +13,7 @@ Rolling-origin backtest: first training cut-off 2022-12, a new origin every 2 mo
 |        12 |             8 |              1 |        4 |                8 |
 
 
-## Median RMSE skill vs Seasonal Naive (%, positive = better than baseline)
+## Median RMSE skill vs Seasonal Naive (%, positive = better than baseline), by horizon
 
 |   horizon |   Combination |   Holt-Winters |   SARIMA |
 |----------:|--------------:|---------------:|---------:|
@@ -20,7 +22,7 @@ Rolling-origin backtest: first training cut-off 2022-12, a new origin every 2 mo
 |        12 |           5.4 |           -2.2 |     -0.5 |
 
 
-## % of series where the winner beats the baseline by at least 5%
+## % of the 21 series where the winner beats the baseline by at least 5%, by horizon
 
 |   horizon |   pct |
 |----------:|------:|
@@ -29,7 +31,7 @@ Rolling-origin backtest: first training cut-off 2022-12, a new origin every 2 mo
 |        12 |    52 |
 
 
-## Median MAPE (%) by metric, horizon and model
+## Median MAPE (%) by metric, horizon and model (horizon-specific; median over the 7 segments)
 
 |                   |   Combination |   Holt-Winters |   SARIMA |   Seasonal Naive |
 |:------------------|--------------:|---------------:|---------:|-----------------:|
@@ -44,7 +46,7 @@ Rolling-origin backtest: first training cut-off 2022-12, a new origin every 2 mo
 | ('revpar', 12)    |          18.7 |           24.1 |     22.8 |             20.7 |
 
 
-## Mean empirical coverage of the nominal 80% interval (%)
+## Mean empirical coverage of the raw nominal 80% interval (%), by horizon
 
 |   horizon |   Combination |   Holt-Winters |   SARIMA |   Seasonal Naive |
 |----------:|--------------:|---------------:|---------:|-----------------:|

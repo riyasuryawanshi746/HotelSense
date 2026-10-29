@@ -10,6 +10,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 import service as S  # noqa: E402
+import decision_support as D  # noqa: E402
 
 fails, checks = [], 0
 def check(cond, msg):
@@ -43,6 +44,10 @@ for seg in meta["segments"]:
             d = S.decision(seg, m, h)
             check(len(d["signals"]) >= 4 and d["headline"], f"{tag}: decision incomplete")
             check(not re.search(r"\bnan\b|\binf\b", str(d).lower()), f"{tag}: NaN/inf in decision")
+            for mm, ch in d["changes"].items():
+                check(ch["status"] in D.STATUSES and ch["reason"] in D.REASONS, f"{tag} {mm}: unknown status/reason")
+                check(ch["clear"] == (ch["status"] != "inconclusive"), f"{tag} {mm}: clear disagrees with status")
+            check(d["signals"][0]["status"] == d["changes"][m]["status"], f"{tag}: outlook status != change status")
 [S.overview(m) for m in ("occupancy", "adr", "revpar")]
 
 # model-summary: horizon-specific tables exist for every horizon and agree with model_comparison.csv

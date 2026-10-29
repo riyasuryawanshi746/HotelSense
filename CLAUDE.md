@@ -27,6 +27,8 @@ cd frontend && npm install
 .venv/Scripts/python scripts/03_model_comparison.py   # full SARIMA grid, several minutes (--fast for a quick check)
 .venv/Scripts/python scripts/04_build_calibration.py  # backend/models/calibration.json
 .venv/Scripts/python scripts/05_smoke_test.py         # every segment x metric x horizon + HTTP layer (expect 0 failed)
+.venv/Scripts/python scripts/06_test_decision_rules.py  # synthetic tests for decision rules + frontend label keys
+.venv/Scripts/python scripts/07_validate_change_rule.py # reports/change_rule_validation.md (out-of-sample check of R1)
 
 # run the app (two terminals)
 cd backend && ../.venv/Scripts/python -m uvicorn main:app --reload --port 8000   # API docs: http://localhost:8000/docs
@@ -61,7 +63,7 @@ backend/
   service.py           all app logic, framework-independent (tested by 05_smoke_test.py)
   main.py              thin FastAPI wrapper around service.py
   models/              sarima_config.json, calibration.json (generated, committed)
-scripts/         01-05 pipeline scripts (see Commands)
+scripts/         01-05 pipeline scripts, 06 decision-rule tests, 07 change-rule validation (see Commands)
 reports/         data_audit.md, eda_summary.md, model_comparison.md, figures/, tables/ (backend reads tables/)
 docs/            scope.md, data_dictionary.md, methodology.md
 frontend/        React 18 + Vite, plain JSX, Plotly (plotly.js-basic-dist-min), react-router-dom
@@ -112,9 +114,25 @@ step h only (not 1..h); `/api/overview` `best_model_6m` is the 6-month horizon.
   intervals: half-width = 80th percentile of absolute backtest error per model and horizon band (1-3, 4-6, 7-12),
   forced non-decreasing, clipped to 0-100 for occupancy. Caveat for the report: calibration uses the same
   backtest that is used for evaluation, so real coverage may be a little lower.
-- **Decision support:** a change vs the same months last year is "clear" only if it exceeds the typical forecast
-  error (mean calibrated half-width); capacity / soft-demand flags use each segment's own P90 / P10 occupancy
-  (excluding COVID months); a pricing signal compares occupancy and ADR changes; a reliability label says whether
+- **Decision support, R1 (level change):** compares the forecast AVERAGE over the h months with the published
+  average of the same calendar months last year. Its uncertainty is the 80th percentile of |mean error over steps
+  1..h| across rolling-origin backtest origins for that series and model (`calibration.average_error_quantile`),
+  which keeps the real correlation between monthly errors (no sqrt(h) assumption). Status is
+  `increase`/`decrease` only if |change| > that uncertainty AND |change| >= `MATERIAL` (2 pts occupancy, 3% ADR/RevPAR:
+  PROVISIONAL business assumptions, not statistically validated or optimised; do not change without agreement);
+  else `inconclusive` with a `reason`. Fewer than 6 usable origins -> falls back to
+  the wider single-month half-width. The chart's calibrated per-month band is unchanged.
+  Before this (until 2026-10) R1 compared the change of an average with the single-month half-width, which
+  overstated the uncertainty of the average (the measured width is a median 0.3-0.9x of it per metric and
+  horizon); it fired 0/63 times, now 2/63. A Seasonal Naive forecast equals last year by construction,
+  so it is always `inconclusive` (`baseline_forecast`). `reports/change_rule_validation.md` (script 07): out-of-sample
+  coverage 77.8% (3-month horizon) and 90.1% (6-month) for a nominal 80%; directional accuracy of "supported" calls
+  is weak and based on few calls; the 12-month rule is untested out of sample (too few eligible origins). So the UI
+  words supported changes as prompts to investigate, never as pricing recommendations, and "inconclusive" does
+  not mean "no change".
+- **Decision support, other rules:** capacity / soft-demand flags use each segment's own P90 / P10 occupancy
+  (excluding COVID months); the pricing signal combines the R1 statuses of occupancy, ADR and RevPAR and only
+  prompts a review (never a price move from occupancy alone); a reliability label says whether
   the winning model beats "same as last year" by >= 5%. Everything is framed as planning signals for a
   segment, never as decisions for a specific hotel.
 

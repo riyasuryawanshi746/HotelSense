@@ -44,6 +44,27 @@ def _band_widths(entry: dict) -> dict | None:
     return dict(zip(BANDS, qs))
 
 
+MIN_N_AVG = 6  # fewest backtest origins we accept for a horizon-average quantile
+
+
+def average_error_quantile(bt: pd.DataFrame, h: int, level: float = LEVEL, min_n: int = MIN_N_AVG):
+    """
+    Uncertainty of the AVERAGE over forecast months 1..h (used by the decision rules, not for the chart band).
+    bt: backtest rows of ONE segment / metric / model (columns origin, step, avail, actual, pred).
+    For every origin that has h months of future data, average its h errors, then take the `level`
+    quantile of the absolute averages. Using whole origins keeps the real correlation between monthly
+    errors (no independence / sqrt(h) assumption). Returns (q, n_origins); q is None if n < min_n.
+    """
+    sub = bt[(bt["avail"] >= h) & (bt["step"] <= h)]
+    err = (sub["actual"] - sub["pred"]).groupby(sub["origin"])
+    complete = err.count() == h  # only origins with a finite error for every one of the h steps
+    avg_err = err.mean()[complete].dropna()
+    n = int(len(avg_err))
+    if n < min_n:
+        return None, n
+    return float(np.quantile(avg_err.abs(), level)), n
+
+
 def calibrated_interval(fc, cal: dict, segment: str, metric: str, model: str, h: int):
     """Return (lower, upper, method) for the first h steps of forecast `fc`."""
     mean = fc.mean.iloc[:h]

@@ -236,14 +236,18 @@ def overview(metric: str = "occupancy") -> dict:
 def decision(segment: str, metric: str, horizon: int) -> dict:
     _check(segment, metric, horizon)
     s = store()
-    frames, rows = {}, {}
+    frames, rows, avg_q = {}, {}, {}
+    bt = s["bt"]
     for m in METRICS:
         row = _best_row(segment, m, horizon)
         frames[m], used, _ = _calibrated(segment, m, row["best_model"], horizon)
         row["best_model"] = used
         rows[m] = row
+        # uncertainty of the horizon AVERAGE, from this model's out-of-sample backtest errors
+        g = bt[(bt.segment == segment) & (bt.metric == m) & (bt.model == used)]
+        avg_q[m] = C.average_error_quantile(g, horizon)
     hist = {m: get_series(s["df"], segment, m) for m in METRICS}
     last = hist[metric].index[-1]
-    out = D.build_decision(segment, metric, horizon, hist, frames, rows, last)
+    out = D.build_decision(segment, metric, horizon, hist, frames, rows, last, avg_q)
     out["models_used"] = {m: rows[m]["best_model"] for m in METRICS}
     return out
